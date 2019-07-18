@@ -1,21 +1,4 @@
 
-//
-// require('./bootstrap');
-//
-// window.Vue = require('vue');
-//
-//
-//
-// // const files = require.context('./', true, /\.vue$/i);
-// // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
-//
-// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-//
-//
-//
-// const app = new Vue({
-//     el: '#app',
-// });
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
@@ -28,6 +11,7 @@ import Home from './components/Home'
 import UsersIndex from './components/UsersIndex'
 import UsersEdit from './components/UsersEdit'
 import NotFound from './components/NotFound'
+import Account from './components/Account'
 
 const router = new VueRouter({
     mode: 'history',
@@ -55,10 +39,19 @@ const router = new VueRouter({
         {
             path: '/404',
             name: '404',
-            component: NotFound },
+            component: NotFound
+        },
 
-        {   path: '*',
-            redirect: '/404' },
+        {
+            path: '*',
+            redirect: '/404'
+        },
+        {
+            path: '/account',
+            name: 'log',
+            component: Account
+        }
+
     ],
 });
 
