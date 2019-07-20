@@ -77,6 +77,29 @@
             </div>
         </div>
 
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Registered</th>
+            </tr>
+            </thead>
+            <tbody v-if="second_users">
+
+            <tr v-for=" second_user in second_users">
+                <td>{{ second_user.id }}</td>
+                <td>{{ second_user.name | upText }}</td>
+                <td>{{ second_user.email }}</td>
+                <td>{{ second_user.created_at | myDate }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+
+
     </div>
 
 </template>
@@ -96,6 +119,8 @@
     export default {
         data() {
             return {
+                second_users: {},
+
                 users: null,
                 meta: null,
                 links: {
@@ -156,6 +181,12 @@
             });
         },
         methods: {
+
+            second_loadUsers(){
+                axios.get("api/user").then(({ data }) => (this.second_users = data.data));
+                console.log(this.second_users);
+            },
+
             goToNext() {
                 this.$router.push({
                     query: {
@@ -189,6 +220,10 @@
             // {
             //     $("#myModal .close").click()
             // }
+
+        },
+        created() {
+            this.second_loadUsers();
         }
     }
 </script>

@@ -2,6 +2,7 @@
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import moment from 'moment'
 
 //V-form
 import { Form, HasError, AlertError } from 'vform'
@@ -61,6 +62,16 @@ const router = new VueRouter({
 
     ],
 });
+
+
+Vue.filter('upText', function(text){
+    return text.charAt(0).toUpperCase() + text.slice(1)
+});
+
+Vue.filter('myDate', function (created) {
+    return  moment(created).format('MMMM Do YYYY');
+});
+
 
 const app = new Vue({
     el: '#app',
