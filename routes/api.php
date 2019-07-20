@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
+
+//только для зарегистрированных пользователей
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -27,3 +29,7 @@ Route::namespace('Api')->group(function () {
     Route::put('/users/{user}', 'UsersController@update');
     Route::delete('/users/{user}', 'UsersController@destroy');
 });
+
+Route::apiResources([
+    'new_user' => 'Api\UserController',
+]);

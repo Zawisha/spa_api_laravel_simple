@@ -34,17 +34,45 @@
                     </div>
 
                     <!-- Modal body -->
-                    <div class="modal-body">
-                        Modal body..
-                    </div>
+                    <form @submit.prevent="createUser($event)">
 
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <input v-model="form.name" type="text" name="name"
+                                   placeholder="Name"
+                                   class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
+                            <has-error :form="form" field="name"></has-error>
+                        </div>
+                        <div class="form-group">
+                            <input v-model="form.email" type="email" name="email"
+                                   placeholder="email"
+                                   class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
+                            <has-error :form="form" field="email"></has-error>
+                        </div>
+                        <div class="form-group">
+                            <input v-model="form.password" type="password" name="password"
+                                   placeholder="password"
+                                   class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
+                            <has-error :form="form" field="password"></has-error>
+                        </div>
+                        <div class="form-group">
+                            <select name="bio" v-model="form.bio" id="bio" class="form-control"
+                                    :class="{ 'is-invalid': form.errors.has('bio') }">
+                                <option value="">Select user role</option>
+                                <option value="1">Man</option>
+                                <option value="2">Woman</option>
+                            </select>
+                            <has-error :form="form" field="bio"></has-error>
+                        </div>
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-dark" data-dismiss="modal">Add_user</button>
+                        <button type="submit" class="btn btn-dark"  >Add_user</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 
                     </div>
-
+                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -77,6 +105,17 @@
                     prev: null,
                 },
                 error: null,
+                //V-form
+                form: new Form(
+                    {
+                        name: '',
+                        email:'',
+                        password:'',
+                        bio:'',
+                        photo:''
+                    }
+                ),
+
             };
         },
         computed: {
@@ -141,6 +180,15 @@
                     this.meta = meta;
                 }
             },
+            createUser()
+            {
+
+                this.form.post('api/new_user');
+            },
+            // closeAdd()
+            // {
+            //     $("#myModal .close").click()
+            // }
         }
     }
 </script>
