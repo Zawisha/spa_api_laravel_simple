@@ -4,6 +4,28 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import moment from 'moment'
 
+// progress bar
+import VueProgressBar from 'vue-progressbar'
+Vue.use(VueProgressBar, {
+    color: 'rgb(143, 255, 199)',
+    failedColor: 'red',
+    height: '3px'
+})
+
+//sweetalert
+import Swal from 'sweetalert2'
+window.Swal = Swal;
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+});
+window.Toast = Toast;
+
+//
+window.Fire = new Vue();
+
 //V-form
 import { Form, HasError, AlertError } from 'vform'
 window.Form = Form;

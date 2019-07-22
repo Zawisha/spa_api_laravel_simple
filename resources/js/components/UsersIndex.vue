@@ -184,6 +184,7 @@
 
             second_loadUsers(){
                 axios.get("api/user").then(({ data }) => (this.second_users = data.data));
+                console.log('yES');
                 console.log(this.second_users);
             },
 
@@ -211,19 +212,42 @@
                     this.meta = meta;
                 }
             },
-            createUser()
-            {
+            createUser() {
+                //progress bar
+                this.$Progress.start();
 
-                this.form.post('api/new_user');
-            },
-            // closeAdd()
-            // {
-            //     $("#myModal .close").click()
-            // }
+                this.form.post('api/new_user')
+                    //if successful
+                    .then(() => {
+                    Fire.$emit('AfterCreate');
+
+
+                    //close modal window
+                    $('#myModal').modal('hide');
+
+                    //toaster
+                    Toast.fire({
+                        type: 'success',
+                        title: 'User created successfully'
+                    })
+                    //progress bar
+                    this.$Progress.finish();
+                })
+                //if not successful
+                    .catch( () => {})
+
+                ;
+            }
 
         },
         created() {
             this.second_loadUsers();
+            //resent function every 3 sec
+            // setInterval(() =>this.second_loadUsers(),3000);
+
+            Fire.$on('AfterCreate', () => {
+                this.second_loadUsers();
+            });
         }
     }
 </script>
