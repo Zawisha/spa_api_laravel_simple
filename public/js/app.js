@@ -1953,6 +1953,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 var getUsers = function getUsers(page, callback) {
@@ -2037,15 +2039,36 @@ var getUsers = function getUsers(page, callback) {
     });
   },
   methods: {
-    second_loadUsers: function second_loadUsers() {
+    deleteUser: function deleteUser(id) {
       var _this2 = this;
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.value) {
+          //send request to the server (only for V-form)
+          _this2.form["delete"]('api/new_user/' + id).then(function () {
+            Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+            Fire.$emit('AfterCreate');
+          })["catch"](function () {
+            swal("Failed", "there was something wrong", "warning");
+          });
+        }
+      });
+    },
+    second_loadUsers: function second_loadUsers() {
+      var _this3 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("api/user").then(function (_ref) {
         var data = _ref.data;
-        return _this2.second_users = data.data;
+        return _this3.second_users = data.data;
       });
-      console.log('yES');
-      console.log(this.second_users);
     },
     goToNext: function goToNext() {
       this.$router.push({
@@ -2076,7 +2099,7 @@ var getUsers = function getUsers(page, callback) {
       }
     },
     createUser: function createUser() {
-      var _this3 = this;
+      var _this4 = this;
 
       //progress bar
       this.$Progress.start();
@@ -2091,19 +2114,19 @@ var getUsers = function getUsers(page, callback) {
           title: 'User created successfully'
         }); //progress bar
 
-        _this3.$Progress.finish();
+        _this4.$Progress.finish();
       }) //if not successful
       ["catch"](function () {});
     }
   },
   created: function created() {
-    var _this4 = this;
+    var _this5 = this;
 
     this.second_loadUsers(); //resent function every 3 sec
     // setInterval(() =>this.second_loadUsers(),3000);
 
     Fire.$on('AfterCreate', function () {
-      _this4.second_loadUsers();
+      _this5.second_loadUsers();
     });
   }
 });
@@ -25283,6 +25306,21 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [
                   _vm._v(_vm._s(_vm._f("myDate")(second_user.created_at)))
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "a",
+                    {
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteUser(second_user.id)
+                        }
+                      }
+                    },
+                    [_vm._v("DELETE")]
+                  )
                 ])
               ])
             }),
@@ -25341,7 +25379,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Email")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Registered")])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Registered")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Delete")])
       ])
     ])
   }

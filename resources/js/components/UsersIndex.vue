@@ -85,6 +85,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Registered</th>
+                <th>Delete</th>
             </tr>
             </thead>
             <tbody v-if="second_users">
@@ -94,6 +95,7 @@
                 <td>{{ second_user.name | upText }}</td>
                 <td>{{ second_user.email }}</td>
                 <td>{{ second_user.created_at | myDate }}</td>
+                <td><a href="#" @click="deleteUser(second_user.id)">DELETE</a></td>
             </tr>
             </tbody>
         </table>
@@ -182,10 +184,36 @@
         },
         methods: {
 
+            deleteUser(id){
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+if(result.value) {
+    //send request to the server (only for V-form)
+    this.form.delete('api/new_user/' + id).then(() => {
+
+        Swal.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+        )
+        Fire.$emit('AfterCreate');
+    }).catch(() => {
+        swal("Failed", "there was something wrong", "warning")
+    });
+}
+                })
+            },
+
             second_loadUsers(){
                 axios.get("api/user").then(({ data }) => (this.second_users = data.data));
-                console.log('yES');
-                console.log(this.second_users);
+
             },
 
             goToNext() {
