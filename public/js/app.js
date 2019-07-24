@@ -1955,6 +1955,66 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var getUsers = function getUsers(page, callback) {
@@ -1974,6 +2034,7 @@ var getUsers = function getUsers(page, callback) {
   data: function data() {
     return {
       second_users: {},
+      edit_users: null,
       users: null,
       meta: null,
       links: {
@@ -1982,6 +2043,10 @@ var getUsers = function getUsers(page, callback) {
         next: null,
         prev: null
       },
+      edit_id: '',
+      edit_name: '',
+      edit_email: '',
+      edit_gender: '',
       error: null,
       //V-form
       form: new Form({
@@ -2042,6 +2107,7 @@ var getUsers = function getUsers(page, callback) {
     deleteUser: function deleteUser(id) {
       var _this2 = this;
 
+      // SWAL - SweetAlert
       Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -2117,16 +2183,38 @@ var getUsers = function getUsers(page, callback) {
         _this4.$Progress.finish();
       }) //if not successful
       ["catch"](function () {});
+    },
+    EditUser: function EditUser(user_edit_id) {
+      var _this5 = this;
+
+      // console.log( user_edit_id );
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('api/edit_user/' + user_edit_id).then(function (response) {
+        _this5.edit_users = response;
+        _this5.edit_name = _this5.edit_users.data.name, _this5.edit_email = _this5.edit_users.data.email, _this5.edit_gender = _this5.edit_users.data.bio, _this5.edit_id = _this5.edit_users.data.id;
+      });
+    },
+    EditOneUser: function EditOneUser() {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('api/new_user/' + this.edit_name, {
+        name: this.edit_name,
+        email: this.edit_email,
+        bio: this.edit_gender,
+        id: this.edit_id
+      }).then(function () {
+        $('#myModal_EDIT').modal('hide');
+        Swal.fire('Edit success!', 'User edited.', 'success');
+        Fire.$emit('AfterCreate');
+      })["catch"](function () {});
     }
   },
   created: function created() {
-    var _this5 = this;
+    var _this6 = this;
 
     this.second_loadUsers(); //resent function every 3 sec
     // setInterval(() =>this.second_loadUsers(),3000);
+    //Refresh page
 
     Fire.$on('AfterCreate', function () {
-      _this5.second_loadUsers();
+      _this6.second_loadUsers();
     });
   }
 });
@@ -25034,9 +25122,9 @@ var render = function() {
               "li",
               [
                 _c("strong", [_vm._v("Name:")]),
-                _vm._v(" " + _vm._s(name) + ",\n            "),
+                _vm._v(" " + _vm._s(name) + ",\n                "),
                 _c("strong", [_vm._v("Email:")]),
-                _vm._v(" " + _vm._s(email) + "\n            "),
+                _vm._v(" " + _vm._s(email) + "\n                "),
                 _c(
                   "router-link",
                   { attrs: { to: { name: "users.edit", params: { id: id } } } },
@@ -25064,7 +25152,7 @@ var render = function() {
         },
         [_vm._v("Previous")]
       ),
-      _vm._v("\n        " + _vm._s(_vm.paginatonCount) + "\n        "),
+      _vm._v("\n            " + _vm._s(_vm.paginatonCount) + "\n            "),
       _c(
         "button",
         {
@@ -25090,7 +25178,7 @@ var render = function() {
           "data-target": "#myModal"
         }
       },
-      [_vm._v("\n        Add new user\n    ")]
+      [_vm._v("\n            Add new user\n        ")]
     ),
     _vm._v(" "),
     _c("div", { staticClass: "modal", attrs: { id: "myModal" } }, [
@@ -25290,8 +25378,165 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
+    _c("div", { staticClass: "modal", attrs: { id: "myModal_EDIT" } }, [
+      _c("div", { staticClass: "modal-dialog modal-dialog-centered" }, [
+        _c("div", { staticClass: "modal-content" }, [
+          _vm._m(2),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.EditOneUser($event)
+                }
+              }
+            },
+            [
+              _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "div",
+                  { staticClass: "form-group" },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.edit_name,
+                          expression: "edit_name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      class: { "is-invalid": _vm.form.errors.has("name") },
+                      attrs: {
+                        type: "text",
+                        name: "name",
+                        placeholder: "Name"
+                      },
+                      domProps: { value: _vm.edit_name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.edit_name = $event.target.value
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("has-error", {
+                      attrs: { form: _vm.form, field: "name" }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group" },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.edit_email,
+                          expression: "edit_email"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      class: { "is-invalid": _vm.form.errors.has("email") },
+                      attrs: {
+                        type: "email",
+                        name: "email",
+                        placeholder: "email"
+                      },
+                      domProps: { value: _vm.edit_email },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.edit_email = $event.target.value
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("has-error", {
+                      attrs: { form: _vm.form, field: "email" }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group" },
+                  [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.edit_gender,
+                            expression: "edit_gender"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        class: { "is-invalid": _vm.form.errors.has("gender") },
+                        attrs: { name: "bio", id: "gender" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.edit_gender = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          }
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "" } }, [
+                          _vm._v("Select user role")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "1" } }, [
+                          _vm._v("Man")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "2" } }, [
+                          _vm._v("Woman")
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("has-error", {
+                      attrs: { form: _vm.form, field: "gender" }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _vm._m(3)
+              ])
+            ]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
     _c("table", { staticClass: "table" }, [
-      _vm._m(2),
+      _vm._m(4),
       _vm._v(" "),
       _vm.second_users
         ? _c(
@@ -25320,6 +25565,30 @@ var render = function() {
                       }
                     },
                     [_vm._v("DELETE")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: {
+                        type: "button",
+                        "data-toggle": "modal",
+                        "data-target": "#myModal_EDIT"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.EditUser(second_user.id)
+                        }
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                    Edit user\n                "
+                      )
+                    ]
                   )
                 ])
               ])
@@ -25371,6 +25640,42 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h4", { staticClass: "modal-title" }, [_vm._v("Edit user")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("×")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c("button", { staticClass: "btn btn-dark", attrs: { type: "submit" } }, [
+        _vm._v("Edit_user")
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-danger",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
         _c("th", { attrs: { scope: "col" } }, [_vm._v("id")]),
@@ -25381,7 +25686,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Registered")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Delete")])
+        _c("th", [_vm._v("Delete")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Edit")])
       ])
     ])
   }

@@ -18,6 +18,8 @@
         </div>
 
 
+<!--        ADD NEW USER MODAL WINDOW-->
+
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
             Add new user
         </button>
@@ -76,6 +78,59 @@
                 </div>
             </div>
         </div>
+<!--END ADD NEW USER MODAL WINDOW-->
+
+<!--EDIT USER MODAL WINDOW-->
+        <!-- The Modal -->
+        <div class="modal" id="myModal_EDIT">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit user</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <form @submit.prevent="EditOneUser($event)">
+
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                <input v-model="edit_name" type="text" name="name"
+                                       placeholder="Name"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
+                                <has-error :form="form" field="name"></has-error>
+                            </div>
+                            <div class="form-group">
+                                <input v-model="edit_email" type="email" name="email"
+                                       placeholder="email"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
+                                <has-error :form="form" field="email"></has-error>
+                            </div>
+                            <div class="form-group">
+                                <select name="bio" v-model="edit_gender" id="gender" class="form-control"
+                                        :class="{ 'is-invalid': form.errors.has('gender') }">
+                                    <option value="">Select user role</option>
+                                    <option value="1">Man</option>
+                                    <option value="2">Woman</option>
+                                </select>
+                                <has-error :form="form" field="gender"></has-error>
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-dark"  >Edit_user</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+<!--        END EDIT USER MODAL WINDOW-->
 
 
         <table class="table">
@@ -86,6 +141,7 @@
                 <th scope="col">Email</th>
                 <th scope="col">Registered</th>
                 <th>Delete</th>
+                <th>Edit</th>
             </tr>
             </thead>
             <tbody v-if="second_users">
@@ -96,9 +152,13 @@
                 <td>{{ second_user.email }}</td>
                 <td>{{ second_user.created_at | myDate }}</td>
                 <td><a href="#" @click="deleteUser(second_user.id)">DELETE</a></td>
+                <td><button type="button" class="btn btn-primary" data-toggle="modal" @click="EditUser(second_user.id)" data-target="#myModal_EDIT">
+                    Edit user
+                </button></td>
             </tr>
             </tbody>
         </table>
+
 
 
 
@@ -122,7 +182,7 @@
         data() {
             return {
                 second_users: {},
-
+                edit_users:null,
                 users: null,
                 meta: null,
                 links: {
@@ -131,6 +191,10 @@
                     next: null,
                     prev: null,
                 },
+                edit_id:'',
+                edit_name:'',
+                edit_email:'',
+                edit_gender:'',
                 error: null,
                 //V-form
                 form: new Form(
@@ -140,11 +204,14 @@
                         password:'',
                         bio:'',
                         photo:''
+
                     }
                 ),
 
+
             };
         },
+
         computed: {
             nextPage() {
                 if (! this.meta || this.meta.current_page === this.meta.last_page) {
@@ -185,6 +252,7 @@
         methods: {
 
             deleteUser(id){
+                // SWAL - SweetAlert
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -265,14 +333,48 @@ if(result.value) {
                     .catch( () => {})
 
                 ;
-            }
+            },
+
+            EditUser(user_edit_id)
+            {
+                // console.log( user_edit_id );
+                axios
+                    .get('api/edit_user/'+ user_edit_id)
+                    .then( (response)  => {
+                        (this.edit_users = response);
+                                this.edit_name = this.edit_users.data.name,
+                                this.edit_email = this.edit_users.data.email,
+                                this.edit_gender = this.edit_users.data.bio,
+                                this.edit_id = this.edit_users.data.id
+                    });
+            },
+            EditOneUser()
+            {
+                axios
+                    .put('api/new_user/'+ this.edit_name,{
+                        name: this.edit_name,
+                        email: this.edit_email,
+                        bio: this.edit_gender,
+                        id:this.edit_id
+                    }).then(() => {
+                    $('#myModal_EDIT').modal('hide');
+                    Swal.fire(
+                        'Edit success!',
+                        'User edited.',
+                        'success'
+                    )
+                    Fire.$emit('AfterCreate');
+                }).catch( () => {});
+            },
 
         },
+
         created() {
             this.second_loadUsers();
             //resent function every 3 sec
             // setInterval(() =>this.second_loadUsers(),3000);
 
+//Refresh page
             Fire.$on('AfterCreate', () => {
                 this.second_loadUsers();
             });

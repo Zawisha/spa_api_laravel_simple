@@ -33,6 +33,7 @@ Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);
 
 
+
 Vue.use(VueRouter);
 
 import App from './components/App'

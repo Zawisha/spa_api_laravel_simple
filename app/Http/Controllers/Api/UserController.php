@@ -50,7 +50,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::find($id);
+        return $user;
     }
 
     /**
@@ -62,7 +63,8 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+    User::where('id', $request['id'])
+     ->update(['name' => $request['name'], 'email' => $request['email'], 'bio' => $request['bio']]);
     }
 
     /**
@@ -76,5 +78,11 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $user->delete();
+    }
+
+    public function edit($id)
+    {
+       return $user = User::find($id);
+
     }
 }
