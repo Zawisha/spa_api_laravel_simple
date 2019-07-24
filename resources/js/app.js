@@ -36,6 +36,28 @@ Vue.component(AlertError.name, AlertError);
 
 Vue.use(VueRouter);
 
+
+Vue.component(
+    'passport-clients',
+    require('./components/passport/Clients.vue').default
+);
+
+Vue.component(
+    'passport-authorized-clients',
+    require('./components/passport/AuthorizedClients.vue').default
+);
+
+Vue.component(
+    'passport-personal-access-tokens',
+    require('./components/passport/PersonalAccessTokens.vue').default
+);
+
+
+
+
+//
+// import AuthorizedClients from './components/passport/AuthorizedClients.vue'
+
 import App from './components/App'
 import Hello from './components/Hello'
 import Home from './components/Home'
@@ -94,6 +116,8 @@ Vue.filter('upText', function(text){
 Vue.filter('myDate', function (created) {
     return  moment(created).format('MMMM Do YYYY');
 });
+
+
 
 
 const app = new Vue({
