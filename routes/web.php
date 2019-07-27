@@ -19,7 +19,13 @@
 //
 //Route::get('/home', 'HomeController@index')->name('home');
 
+//Route::get('/qwe', 'SpaController@index');
+
+
+//Route::get('/profile', 'Api\UserController@profile');
+
 Route::get('/{any}', 'SpaController@index')->where('any', '.*');
+//Route::get('{path}','SpaController@index')->where( 'path', '([A-z\d-/_.]+)?' );
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

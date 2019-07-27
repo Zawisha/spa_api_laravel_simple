@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['web','auth:api']);
+
+       // $this->middleware('web');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -85,4 +92,14 @@ class UserController extends Controller
        return $user = User::find($id);
 
     }
+
+    public function profile()
+    {
+        return $user = User::find('81');
+//        return auth('api') -> user();
+       // dd('weeer');
+      //  return "yes";
+    }
+
+
 }

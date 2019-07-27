@@ -1,5 +1,9 @@
 <template>
     <div>
+        <p>
+            <router-link :to="{ name: 'log_pas' }">Login_passport</router-link> |
+            <router-link :to="{ name: 'reg_pas' }">Register_passport</router-link> |
+        </p>
         <h1>Vue Router Demo App</h1>
 
         <p>

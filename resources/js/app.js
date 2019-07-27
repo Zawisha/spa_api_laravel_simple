@@ -4,6 +4,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import moment from 'moment'
 
+
+
+
 // progress bar
 import VueProgressBar from 'vue-progressbar'
 Vue.use(VueProgressBar, {
@@ -56,7 +59,7 @@ Vue.component(
 
 
 //
-// import AuthorizedClients from './components/passport/AuthorizedClients.vue'
+import AuthorizedClients from './components/passport/AuthorizedClients.vue'
 
 import App from './components/App'
 import Hello from './components/Hello'
@@ -65,6 +68,8 @@ import UsersIndex from './components/UsersIndex'
 import UsersEdit from './components/UsersEdit'
 import NotFound from './components/NotFound'
 import Account from './components/Account'
+import LoginPassport from "./components/LoginPassport";
+import RegisterPassport from "./components/RegisterPassport";
 
 const router = new VueRouter({
     mode: 'history',
@@ -103,6 +108,16 @@ const router = new VueRouter({
             path: '/account',
             name: 'log',
             component: Account
+        },
+        {
+            path: '/login_passport',
+            name: 'log_pas',
+            component: LoginPassport
+        },
+        {
+            path: '/register_passport',
+            name: 'reg_pas',
+            component: RegisterPassport
         }
 
     ],
