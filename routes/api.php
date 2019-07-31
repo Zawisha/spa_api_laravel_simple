@@ -41,3 +41,6 @@ Route::get('/profile', 'Api\UserController@profile');
 //passport register
 Route::post('/reg_pas', 'Api\PassportAuthController@register');
 Route::post('/log_pas', 'Api\PassportAuthController@login');
+
+//images
+Route::put('/profile', 'Api\UserController@updateProfile');

@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['web','auth:api']);
+       // $this->middleware(['web','auth:api']);
 
        // $this->middleware('web');
     }
@@ -99,6 +100,34 @@ class UserController extends Controller
 //        return auth('api') -> user();
        // dd('weeer');
       //  return "yes";
+    }
+
+
+    //image controller
+    public function updateProfile(Request $request)
+    {
+        $user = User::find('81');
+//        $this->validate($request,[
+//            'name' => 'required|string|max:191',
+//            'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
+//            'password' => 'sometimes|required|min:6'
+//        ]);
+
+
+        // $user =  auth('api') -> user();
+      if($request->photo)
+      {
+              $name = time().'.' . explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
+
+          $img = Image::make($request->photo)->save(public_path('img/profile/').$name);
+
+          $request->merge(['photo' => $name]);
+
+               // return $img;
+      }
+
+//        $user->update($request->all());
+$up_user=$user->update(['photo' => $name]);
     }
 
 

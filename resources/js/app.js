@@ -70,6 +70,7 @@ import NotFound from './components/NotFound'
 import Account from './components/Account'
 import LoginPassport from "./components/LoginPassport";
 import RegisterPassport from "./components/RegisterPassport";
+import ImageComponent from "./components/ImageComponent";
 
 const router = new VueRouter({
     mode: 'history',
@@ -118,7 +119,12 @@ const router = new VueRouter({
             path: '/register_passport',
             name: 'reg_pas',
             component: RegisterPassport
-        }
+        },
+        {
+            path: '/image_upload',
+            name: 'im_upload',
+            component: ImageComponent
+        },
 
     ],
 });
